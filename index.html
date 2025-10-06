@@ -25,25 +25,24 @@
 
         <div class="divider"></div>
 
-
-
-
         <main>
             <h1>My Library</h1>
-            <button class="open-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <button class="open-button btn" title="add-book"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <title>plus</title>
                     <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                 </svg>
-                <p>Add New Book</p>
             </button>
-            <dialog class="modal form-container" id="modal">
+
+            <div class="overlay" id="overlay"></div>
+            
+            <div class="sidebar-form" id="formPanel">
                 <h2>Add Your Book</h2>
                 <div class="divider"></div>
-                <div class="close-button">&#x2715</div>
+                <button class="close-button" title="close">&times;</button>
                 <form action="#">
                     <div class="input-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" name="title" required>
+                        <input type="text" id="title" name="title">
                     </div>
                     <div class="input-group">
                         <label for="pages">Number of Pages</label>
@@ -51,19 +50,20 @@
                     </div>
                     <div class="input-group">
                         <label for="author">Author</label>
-                        <input type="text" id="author" name="author" required>
+                        <input type="text" id="author" name="author">
                     </div>
                     <div class="input-group">
                         <label for="readStatus">Read Status</label>
-                        <select name="readStatus" id="readStatus" required>
+                        <select name="readStatus" id="readStatus">
                             <option value="true">Yes - I have read this book</option>
                             <option value="false">No - I have not read this book</option>
                         </select>
                     </div>
 
-                    <button>Add Book To Library</button>
+                    <button class="btn">Add Book To Library</button>
                 </form>
-            </dialog>
+            </div>
+
             <section>
                 <h2>Your Book Collection</h2>
                 <div class="book-stats-wrapper">

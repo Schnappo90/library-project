@@ -5,9 +5,10 @@
 const libraryDisplay = document.querySelector(".book-grid");
 const form = document.querySelector("form");
 const inputs = form.querySelectorAll("input");
-const modal = document.querySelector("#modal");
-const openModal = document.querySelector(".open-button");
-const closeModal = document.querySelector(".close-button");
+const sidebar = document.querySelector(".sidebar-form");
+const openMenu = document.querySelector(".open-button");
+const close = document.querySelector(".close-button");
+const overlay = document.querySelector(".overlay");
 
 const totalFilter = document.querySelector(".total-label");
 const totalReadFilter = document.querySelector(".total-read-label");
@@ -21,19 +22,24 @@ const favouriteCount = document.querySelector(".total-favourite-count");
 
 const myLibrary = [];
 
-
 /* ======================================
-   2. MODAL CONTROLS
+   2. SIDEBAR CONTROLS
 ====================================== */
 
-openModal.addEventListener("click", () => {
-  modal.showModal();
+openMenu.addEventListener("click", () => {
+  sidebar.classList.add("open");
+  overlay.classList.add("active");
 });
 
-closeModal.addEventListener("click", () => {
-  modal.close();
+close.addEventListener("click", () => {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
 });
 
+overlay.addEventListener("click", () => {
+  sidebar.classList.remove("open");
+  overlay.classList.remove("active");
+});
 
 /* ======================================
    3. BOOK CONSTRUCTOR & METHODS
@@ -60,25 +66,60 @@ Book.prototype.toggleFavourite = function () {
   this.isFavourite = !this.isFavourite;
 };
 
-
 /* ======================================
    4. CORE DATA FUNCTIONS
 ====================================== */
 
 function addBookToLibrary(title, author, pages, isRead) {
   const newBook = new Book(title, author, pages, isRead);
-  myLibrary.push(newBook);
+  myLibrary.unshift(newBook);
 }
 
-function removeBookItem(e) {
-  const card = e.currentTarget.closest(".book-card");
-  const selectedBook = card.dataset.id;
-  const indexToDelete = myLibrary.findIndex(
-    (element) => element.id === selectedBook
-  );
-  myLibrary.splice(indexToDelete, 1);
+// takes the captured element and deletes it
+function removeFromLibrary(indexNum) {
+  myLibrary.splice(indexNum, 1);
 }
 
+// function removeBookItem(e) {
+//   const card = e.currentTarget.closest(".book-card");
+//   const selectedBook = card.dataset.id;
+//   const indexToDelete = myLibrary.findIndex(
+//     (element) => element.id === selectedBook
+//   );
+//   myLibrary.splice(indexToDelete, 1);
+// }
+
+function showDeleteAlert(selectedBookId) {
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+
+  alert.innerHTML =
+    '<p>Are you sure you want to remove this book from your library?</p><div class="buttons-group"><button class="confirm-btn btn">Confirm</button><button class="cancel-btn btn">Cancel</button></div>';
+
+  document.body.appendChild(alert);
+
+  overlay.classList.add("active");
+
+  //======== confirm button ========
+  alert.querySelector(".confirm-btn").addEventListener("click", () => {
+    const indexToDelete = myLibrary.findIndex(
+      (book) => book.id === selectedBookId
+    );
+
+    removeFromLibrary(indexToDelete);
+    renderLibrary(myLibrary);
+    alert.remove();
+    overlay.classList.remove("active");
+
+  });
+
+// ======== cancel button ========
+
+  alert.querySelector(".cancel-btn").addEventListener("click", () => {
+    alert.remove();
+    overlay.classList.remove("active");
+  });
+}
 
 /* ======================================
    5. FILTER FUNCTIONS
@@ -99,7 +140,6 @@ function filterFavourite() {
   renderLibrary(result);
 }
 
-
 /* ======================================
    6. UI UPDATE FUNCTIONS
 ====================================== */
@@ -108,21 +148,27 @@ function updateCardDisplay(isReadValue, textEl, cardEl) {
   if (isReadValue === true) {
     textEl.textContent = "Read";
     updateBookCounters();
-    cardEl.classList.remove('not-read-border');
+    cardEl.classList.remove("not-read-border");
     cardEl.classList.add("read-border");
   } else {
     textEl.textContent = "Not Read";
     updateBookCounters();
-    cardEl.classList.remove('read-border');
+    cardEl.classList.remove("read-border");
     cardEl.classList.add("not-read-border");
   }
 }
 
 function updateBookCounters() {
   totalBookCount.textContent = myLibrary.length;
-  totalReadCount.textContent = myLibrary.filter((book) => book.isRead == true).length;
-  totalUnreadCount.textContent = myLibrary.filter((book) => book.isRead == false).length;
-  favouriteCount.textContent = myLibrary.filter((book) => book.isFavourite == true).length;
+  totalReadCount.textContent = myLibrary.filter(
+    (book) => book.isRead == true
+  ).length;
+  totalUnreadCount.textContent = myLibrary.filter(
+    (book) => book.isRead == false
+  ).length;
+  favouriteCount.textContent = myLibrary.filter(
+    (book) => book.isFavourite == true
+  ).length;
 }
 
 function toggleFavouriteIcon(item, icon) {
@@ -146,7 +192,6 @@ function showToast(message) {
     toast.classList.remove("show");
   }, 2500);
 }
-
 
 /* ======================================
    7. RENDER FUNCTION
@@ -216,11 +261,12 @@ function renderLibrary(arr) {
     });
 
     deleteBtn.addEventListener("click", (e) => {
-      removeBookItem(e);
-      renderLibrary(myLibrary);
+      const card = e.currentTarget.closest(".book-card");
+      const selectedBookId = card.dataset.id;
+      showDeleteAlert(selectedBookId);
     });
 
-    card.addEventListener('dblclick', () => {
+    card.addEventListener("dblclick", () => {
       toggleFavouriteIcon(book, favouriteIcon);
     });
 
@@ -231,7 +277,6 @@ function renderLibrary(arr) {
 
   updateBookCounters();
 }
-
 
 /* ======================================
    8. FILTER EVENT LISTENERS
@@ -256,18 +301,26 @@ favouriteFilter.addEventListener("click", () => {
   filterFavourite();
 });
 
-
 /* ======================================
    9. INITIAL TEST DATA
 ====================================== */
 
 addBookToLibrary("The Midnight Library", "Matt Haig", 288, true);
 addBookToLibrary("Educated", "Tara Westover", 352, false);
-addBookToLibrary("Sapiens: A Brief History of Humankind", "Yuval Noah Harari", 498, true);
+addBookToLibrary(
+  "Sapiens: A Brief History of Humankind",
+  "Yuval Noah Harari",
+  498,
+  true
+);
 addBookToLibrary("Atomic Habits", "James Clear", 320, true);
-addBookToLibrary("The Subtle Art of Not Giving a F*ck", "Mark Manson", 224, false);
+addBookToLibrary(
+  "The Subtle Art of Not Giving a F*ck",
+  "Mark Manson",
+  224,
+  false
+);
 addBookToLibrary("The Creative Act: A Way of Being", "Rick Rubin", 432, true);
-
 
 /* ======================================
    10. FORM HANDLING & INIT
