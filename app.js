@@ -1,10 +1,13 @@
+/* ======================================
+   1. DOM ELEMENTS & GLOBAL VARIABLES
+====================================== */
+
 const libraryDisplay = document.querySelector(".book-grid");
 const form = document.querySelector("form");
 const inputs = form.querySelectorAll("input");
 const modal = document.querySelector("#modal");
 const openModal = document.querySelector(".open-button");
 const closeModal = document.querySelector(".close-button");
-// const favouriteIcon = document.querySelector('.favourite-icon');
 
 const totalFilter = document.querySelector(".total-label");
 const totalReadFilter = document.querySelector(".total-read-label");
@@ -18,6 +21,11 @@ const favouriteCount = document.querySelector(".total-favourite-count");
 
 const myLibrary = [];
 
+
+/* ======================================
+   2. MODAL CONTROLS
+====================================== */
+
 openModal.addEventListener("click", () => {
   modal.showModal();
 });
@@ -25,6 +33,11 @@ openModal.addEventListener("click", () => {
 closeModal.addEventListener("click", () => {
   modal.close();
 });
+
+
+/* ======================================
+   3. BOOK CONSTRUCTOR & METHODS
+====================================== */
 
 function Book(title, author, pages, isRead) {
   this.title = title;
@@ -47,64 +60,29 @@ Book.prototype.toggleFavourite = function () {
   this.isFavourite = !this.isFavourite;
 };
 
+
+/* ======================================
+   4. CORE DATA FUNCTIONS
+====================================== */
+
 function addBookToLibrary(title, author, pages, isRead) {
   const newBook = new Book(title, author, pages, isRead);
   myLibrary.push(newBook);
 }
 
-function updateCardDisplay(isReadValue, textEl, cardEl) {
-  if (isReadValue === true) {
-    textEl.textContent = "Read";
-
-    updateBookCounters();
-
-    if(cardEl.classList.contains('not-read-border')){
-      cardEl.classList.remove('not-read-border');
-    }
-    cardEl.classList.add("read-border");
-  } else {
-    textEl.textContent = "Not Read";
-
-    updateBookCounters();
-    if(cardEl.classList.contains('read-border')){
-      cardEl.classList.remove('read-border');
-    }
-    cardEl.classList.add("not-read-border");
-  }
-}
-
 function removeBookItem(e) {
   const card = e.currentTarget.closest(".book-card");
-
   const selectedBook = card.dataset.id;
-
   const indexToDelete = myLibrary.findIndex(
     (element) => element.id === selectedBook
   );
-
   myLibrary.splice(indexToDelete, 1);
 }
 
-//-------- Filter Functions ----------
 
-totalFilter.addEventListener("click", () => {
-  renderLibrary(myLibrary);
-});
-
-totalReadFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isRead === true).length === 0) return;
-  filterRead();
-});
-
-totalUnreadFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isRead === false).length === 0) return;
-  filterUnread();
-});
-
-favouriteFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isFavourite).length === 0) return;
-  filterFavourite();
-});
+/* ======================================
+   5. FILTER FUNCTIONS
+====================================== */
 
 function filterRead() {
   const result = myLibrary.filter((book) => book.isRead === true);
@@ -121,17 +99,30 @@ function filterFavourite() {
   renderLibrary(result);
 }
 
+
+/* ======================================
+   6. UI UPDATE FUNCTIONS
+====================================== */
+
+function updateCardDisplay(isReadValue, textEl, cardEl) {
+  if (isReadValue === true) {
+    textEl.textContent = "Read";
+    updateBookCounters();
+    cardEl.classList.remove('not-read-border');
+    cardEl.classList.add("read-border");
+  } else {
+    textEl.textContent = "Not Read";
+    updateBookCounters();
+    cardEl.classList.remove('read-border');
+    cardEl.classList.add("not-read-border");
+  }
+}
+
 function updateBookCounters() {
   totalBookCount.textContent = myLibrary.length;
-  totalReadCount.textContent = myLibrary.filter(
-    (book) => book.isRead == true
-  ).length;
-  totalUnreadCount.textContent = myLibrary.filter(
-    (book) => book.isRead == false
-  ).length;
-  favouriteCount.textContent = myLibrary.filter(
-    (book) => book.isFavourite == true
-  ).length;
+  totalReadCount.textContent = myLibrary.filter((book) => book.isRead == true).length;
+  totalUnreadCount.textContent = myLibrary.filter((book) => book.isRead == false).length;
+  favouriteCount.textContent = myLibrary.filter((book) => book.isFavourite == true).length;
 }
 
 function toggleFavouriteIcon(item, icon) {
@@ -153,8 +144,13 @@ function showToast(message) {
 
   setTimeout(() => {
     toast.classList.remove("show");
-  }, 2500); // message visible for 2.5 seconds
+  }, 2500);
 }
+
+
+/* ======================================
+   7. RENDER FUNCTION
+====================================== */
 
 function renderLibrary(arr) {
   libraryDisplay.textContent = "";
@@ -162,45 +158,37 @@ function renderLibrary(arr) {
   if (arr.length === 0) {
     const libraryEmpty = document.createElement("div");
     libraryEmpty.innerHTML =
-      '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>information-outline</title><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" /></svg> <p>Add books to your library to see them displayed here.</p>';
+      '<svg class="info-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>information-outline</title><path d="M11,9H13V7H11M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M11,17H13V11H11V17Z" /></svg> <p class="empty-library-msg">Add books to your library to see them displayed here.</p>';
     libraryDisplay.append(libraryEmpty);
   }
 
   arr.forEach((book) => {
     const card = document.createElement("div");
     card.classList.add("book-card");
-
     const dataId = document.createAttribute("data-id");
     dataId.value = book.id;
-
     card.setAttributeNode(dataId);
 
     const titleEl = document.createElement("h3");
     titleEl.textContent = book.title;
-
     const authorEl = document.createElement("p");
     authorEl.textContent = `By ${book.author}`;
-
     const pagesEl = document.createElement("p");
     pagesEl.textContent = `${book.pages} Pages`;
 
     const readStatusDisplay = document.createElement("div");
     readStatusDisplay.classList.add("read-status-display");
-
     const readEl = document.createElement("p");
     readEl.textContent = book.isRead ? "Read" : "Not Read";
-
     readStatusDisplay.append(readEl);
 
     const bookInfo = document.createElement("div");
     bookInfo.classList.add("book-info");
-
     bookInfo.append(titleEl, authorEl, pagesEl, readStatusDisplay);
 
     const deleteBtn = document.createElement("div");
     deleteBtn.innerHTML =
       '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>delete</title><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>';
-
     deleteBtn.classList.add("delete-btn");
 
     const toggleButton = document.createElement("div");
@@ -219,7 +207,6 @@ function renderLibrary(arr) {
     cardActions.classList.add("card-actions");
 
     updateCardDisplay(book.isRead, readEl, card);
-
     card.append(bookInfo, cardActions);
     libraryDisplay.appendChild(card);
 
@@ -233,33 +220,60 @@ function renderLibrary(arr) {
       renderLibrary(myLibrary);
     });
 
-    favouriteIcon.addEventListener("click", () => {
+    card.addEventListener('dblclick', () => {
       toggleFavouriteIcon(book, favouriteIcon);
     });
 
+    favouriteIcon.addEventListener("click", () => {
+      toggleFavouriteIcon(book, favouriteIcon);
+    });
   });
+
   updateBookCounters();
 }
 
-// --------Test Books--------
+
+/* ======================================
+   8. FILTER EVENT LISTENERS
+====================================== */
+
+totalFilter.addEventListener("click", () => {
+  renderLibrary(myLibrary);
+});
+
+totalReadFilter.addEventListener("click", () => {
+  if (myLibrary.filter((book) => book.isRead === true).length === 0) return;
+  filterRead();
+});
+
+totalUnreadFilter.addEventListener("click", () => {
+  if (myLibrary.filter((book) => book.isRead === false).length === 0) return;
+  filterUnread();
+});
+
+favouriteFilter.addEventListener("click", () => {
+  if (myLibrary.filter((book) => book.isFavourite).length === 0) return;
+  filterFavourite();
+});
+
+
+/* ======================================
+   9. INITIAL TEST DATA
+====================================== */
+
 addBookToLibrary("The Midnight Library", "Matt Haig", 288, true);
 addBookToLibrary("Educated", "Tara Westover", 352, false);
-addBookToLibrary(
-  "Sapiens: A Brief History of Humankind",
-  "Yuval Noah Harari",
-  498,
-  true
-);
+addBookToLibrary("Sapiens: A Brief History of Humankind", "Yuval Noah Harari", 498, true);
 addBookToLibrary("Atomic Habits", "James Clear", 320, true);
-addBookToLibrary(
-  "The Subtle Art of Not Giving a F*ck",
-  "Mark Manson",
-  224,
-  false
-);
+addBookToLibrary("The Subtle Art of Not Giving a F*ck", "Mark Manson", 224, false);
 addBookToLibrary("The Creative Act: A Way of Being", "Rick Rubin", 432, true);
 
-renderLibrary(myLibrary); //------ display library -------
+
+/* ======================================
+   10. FORM HANDLING & INIT
+====================================== */
+
+renderLibrary(myLibrary);
 
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -268,13 +282,10 @@ form.addEventListener("submit", (e) => {
   const pages = form.querySelector("#pages").value;
   const author = form.querySelector("#author").value;
   const readStatus = form.querySelector("#readStatus");
-
   const isRead = readStatus ? readStatus.value === "true" : false;
 
   addBookToLibrary(title, author, pages, isRead);
-  
   showToast("Book added to library.");
-
   updateBookCounters();
   renderLibrary(myLibrary);
   form.reset();

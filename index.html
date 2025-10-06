@@ -43,27 +43,25 @@
                 <form action="#">
                     <div class="input-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" required>
                     </div>
                     <div class="input-group">
-                        <label for="pages">Pages</label>
+                        <label for="pages">Number of Pages</label>
                         <input type="number" min="1" id="pages" name="pages">
                     </div>
                     <div class="input-group">
                         <label for="author">Author</label>
-                        <input type="text" id="author" name="author">
+                        <input type="text" id="author" name="author" required>
                     </div>
                     <div class="input-group">
                         <label for="readStatus">Read Status</label>
-                        <select name="readStatus" id="readStatus">
+                        <select name="readStatus" id="readStatus" required>
                             <option value="true">Yes - I have read this book</option>
                             <option value="false">No - I have not read this book</option>
                         </select>
                     </div>
 
-
-
-                    <button>Add Book</button>
+                    <button>Add Book To Library</button>
                 </form>
             </dialog>
             <section>
