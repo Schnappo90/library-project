@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+    <div class="toast" id="toast">Book added to library.</div>
+    <div class="container">
+        <nav>
+            <div class="nav-elements">
+                <div class="logo">WanderShelf.</div>
+                <div class="slogan">Where every book is a new journey</div>
+            </div>
+        </nav>
+
+        <div class="divider"></div>
+
+
+
+
+        <main>
+            <h1>My Library</h1>
+            <button class="open-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <title>plus</title>
+                    <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                </svg>
+                <p>Add New Book</p>
+            </button>
+            <dialog class="modal form-container" id="modal">
+                <h2>Add Your Book</h2>
+                <div class="divider"></div>
+                <div class="close-button">&#x2715</div>
+                <form action="#">
+                    <div class="input-group">
+                        <label for="title">Title</label>
+                        <input type="text" id="title" name="title">
+                    </div>
+                    <div class="input-group">
+                        <label for="pages">Pages</label>
+                        <input type="number" min="1" id="pages" name="pages">
+                    </div>
+                    <div class="input-group">
+                        <label for="author">Author</label>
+                        <input type="text" id="author" name="author">
+                    </div>
+                    <div class="input-group">
+                        <label for="readStatus">Read Status</label>
+                        <select name="readStatus" id="readStatus">
+                            <option value="true">Yes - I have read this book</option>
+                            <option value="false">No - I have not read this book</option>
+                        </select>
+                    </div>
+
+
+
+                    <button>Add Book</button>
+                </form>
+            </dialog>
+            <section>
+                <h2>Your Book Collection</h2>
+                <div class="book-stats-wrapper">
+                    <p class="total-label"><span class="bold">Total Books: </span> <span class="total-count">0</span>
+                    </p>
+                    <p class="total-read-label"><span class="bold">Read: </span><span class="total-read-count">0</span>
+                    </p>
+                    <p class="total-unread-label"><span class="bold">Not Read: </span><span
+                            class="total-unread-count">0</span></p>
+                    <p class="total-favourites-label"><span class="bold">Favourited: </span><span
+                            class="total-favourite-count">0</span></p>
+                </div>
+                <!-- <button class="filter-btn">Filter</button> -->
+
+                <div class="book-grid">
+                </div>
+
+            </section>
+
+        </main>
+        <footer>
+            <p>Keep turning the page — there’s always another story waiting.</p>
+            <p>© 2025 My Library • Made by Alex Knapp</p>
+        </footer>
+
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
