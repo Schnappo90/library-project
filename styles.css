@@ -4,6 +4,8 @@
 :root {
     /* Colours */
     --light-grey: rgb(249, 249, 249);
+    --btn-grey: rgb(242, 242, 242);
+    --btn-hover: rgb(237, 237, 237);
     --orange: rgba(253, 129, 82, 1);
     --blue: rgba(114, 167, 232);
     --btn-hover-blue: rgb(103, 149, 207);
@@ -223,14 +225,12 @@ select {
     pointer-events: all;
 }
 
-
-
 /* ===================================
    BOOK STATS & GRID
 =================================== */
 .book-stats-wrapper {
     display: flex;
-    gap: 1.25rem;
+    gap: 0.25rem;
     margin-bottom: 1rem;
 }
 
@@ -332,22 +332,16 @@ select {
 =================================== */
 
 .alert {
-
+    height: 175px;
+    width: 275px;
     background-color: white;
-}
-
-.alert {
-    /* width: 300px; */
     box-shadow: var(--box-shad);
     border-radius: 8px;
-    height: 150px;
     min-width: 250px;
-    padding: 1rem 2rem;
-    margin: auto;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: space-between;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -355,14 +349,44 @@ select {
     z-index: 10000;
 }
 
-.alert p {
+.alert h3 {
+    font-size: 1.1rem;
     margin-bottom: 1rem;
+}
 
+.alert p {
+    font-size: 0.8rem;
+    color: grey;
 }
 
 .buttons-group {
     display: flex;
-    gap: 1.5rem;
+    gap: 1rem;
+    justify-self: flex-end;
+    align-self: center;
+    width: 100%;
+}
+
+.alert button {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.confirm-btn {
+    background-color: var(--blue);
+    color: white;
+}
+
+.cancel-btn {
+    background-color: var(--btn-grey);
+    color: var(--font-hover-clr);
+}
+
+.cancel-btn:hover {
+    background-color: var(--btn-hover);
 }
 
 /* ===================================
@@ -374,7 +398,6 @@ select {
     left: 50%;
     transform: translateX(-50%);
     background-color: #83c484;
-    /* green */
     color: var(--white);
     padding: 1.5rem 2.5rem;
     border-radius: 8px;
@@ -406,3 +429,23 @@ select {
     background-image: var(--gradient);
     margin: 10px 0 30px;
 }
+
+.book-stats-wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.book-stats-wrapper p {
+    padding: 0.5rem 0.75rem;
+    background-color: transparent;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.book-stats-wrapper p.active-filter {
+    background-color: rgb(59, 59, 59);
+    color: white;
+    border-radius: 4px;
+}
+
+

@@ -45,12 +45,12 @@ overlay.addEventListener("click", () => {
    3. BOOK CONSTRUCTOR & METHODS
 ====================================== */
 
-function Book(title, author, pages, isRead) {
+function Book(title, author, pages, isRead, isFavourite = false) {
   this.title = title;
   this.author = author;
   this.pages = pages;
   this.isRead = Boolean(isRead);
-  this.isFavourite = false;
+  this.isFavourite = isFavourite;
   this.id = crypto.randomUUID();
 }
 
@@ -70,8 +70,8 @@ Book.prototype.toggleFavourite = function () {
    4. CORE DATA FUNCTIONS
 ====================================== */
 
-function addBookToLibrary(title, author, pages, isRead) {
-  const newBook = new Book(title, author, pages, isRead);
+function addBookToLibrary(title, author, pages, isRead, isFavourite) {
+  const newBook = new Book(title, author, pages, isRead, isFavourite);
   myLibrary.unshift(newBook);
 }
 
@@ -80,28 +80,22 @@ function removeFromLibrary(indexNum) {
   myLibrary.splice(indexNum, 1);
 }
 
-// function removeBookItem(e) {
-//   const card = e.currentTarget.closest(".book-card");
-//   const selectedBook = card.dataset.id;
-//   const indexToDelete = myLibrary.findIndex(
-//     (element) => element.id === selectedBook
-//   );
-//   myLibrary.splice(indexToDelete, 1);
-// }
-
 function showDeleteAlert(selectedBookId) {
   const alert = document.createElement("div");
   alert.classList.add("alert");
 
   alert.innerHTML =
-    '<p>Are you sure you want to remove this book from your library?</p><div class="buttons-group"><button class="confirm-btn btn">Confirm</button><button class="cancel-btn btn">Cancel</button></div>';
+    '<div class="alert-content"><h3 class="alert-title">Delete book?</h3><p>Are you sure you want to remove this book from your library? You will be unable to undo this action.</p></div><div class="buttons-group"><button class="confirm-btn btn">Confirm</button><button class="cancel-btn btn">Cancel</button></div>';
 
   document.body.appendChild(alert);
 
   overlay.classList.add("active");
 
+  const confirmBtn = alert.querySelector('.confirm-btn');
+  const cancelBtn = alert.querySelector('.cancel-btn');
+
   //======== confirm button ========
-  alert.querySelector(".confirm-btn").addEventListener("click", () => {
+  confirmBtn.addEventListener("click", () => {
     const indexToDelete = myLibrary.findIndex(
       (book) => book.id === selectedBookId
     );
@@ -110,15 +104,20 @@ function showDeleteAlert(selectedBookId) {
     renderLibrary(myLibrary);
     alert.remove();
     overlay.classList.remove("active");
-
   });
 
-// ======== cancel button ========
+  // ======== cancel button ========
 
-  alert.querySelector(".cancel-btn").addEventListener("click", () => {
+  cancelBtn.addEventListener("click", closeAlert);
+
+  const closeOnOverlayClick = () => closeAlert();
+  overlay.addEventListener("click", closeOnOverlayClick);
+
+  function closeAlert() {
     alert.remove();
-    overlay.classList.remove("active");
-  });
+    overlay.classList.remove('active');
+    overlay.removeEventListener("click", closeOnOverlayClick);
+  }
 }
 
 /* ======================================
@@ -320,7 +319,7 @@ addBookToLibrary(
   224,
   false
 );
-addBookToLibrary("The Creative Act: A Way of Being", "Rick Rubin", 432, true);
+addBookToLibrary("The Creative Act: A Way of Being", "Rick Rubin", 432, true, true);
 
 /* ======================================
    10. FORM HANDLING & INIT
@@ -343,3 +342,17 @@ form.addEventListener("submit", (e) => {
   renderLibrary(myLibrary);
   form.reset();
 });
+
+
+const filterOptions = document.querySelectorAll('.book-stats-wrapper p');
+
+filterOptions.forEach(filter => {
+  filter.addEventListener('click', () => {
+    let activeFilter = document.querySelector('.book-stats-wrapper p.active-filter');
+
+    if(activeFilter) {
+      activeFilter.classList.remove('active-filter')
+    }
+    filter.classList.add('active-filter');
+  })
+})
