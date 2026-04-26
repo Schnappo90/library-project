@@ -140,39 +140,65 @@ function filterFavourite() {
 }
 
 /* ======================================
+   5. NEW FILTER FUNCTIONS
+====================================== */
+
+
+
+document.querySelectorAll('.filters input[type="radio"]').forEach((radio) => {
+  radio.addEventListener('change', (e) => {
+    const id = e.target.id;
+    switch (id) {
+      case "filter-total":
+        renderLibrary(myLibrary);
+        break;
+      case "filter-read":
+        filterRead();
+        break;
+      case "filter-unread":
+        filterUnread();
+        break;
+      case "filter-favourites":
+        filterFavourite();
+        break;
+    }
+  });
+});
+
+/* ======================================
    6. UI UPDATE FUNCTIONS
 ====================================== */
 
 function updateCardDisplay(isReadValue, textEl, cardEl) {
   if (isReadValue === true) {
     textEl.textContent = "Read";
-    updateBookCounters();
+    // updateBookCounters();
     cardEl.classList.remove("not-read-border");
     cardEl.classList.add("read-border");
   } else {
     textEl.textContent = "Not Read";
-    updateBookCounters();
+    // updateBookCounters();
     cardEl.classList.remove("read-border");
     cardEl.classList.add("not-read-border");
   }
 }
 
-function updateBookCounters() {
-  totalBookCount.textContent = myLibrary.length;
-  totalReadCount.textContent = myLibrary.filter(
-    (book) => book.isRead == true
-  ).length;
-  totalUnreadCount.textContent = myLibrary.filter(
-    (book) => book.isRead == false
-  ).length;
-  favouriteCount.textContent = myLibrary.filter(
-    (book) => book.isFavourite == true
-  ).length;
-}
+// function updateBookCounters() {
+//   totalBookCount.textContent = myLibrary.length;
+//   totalReadCount.textContent = myLibrary.filter(
+//     (book) => book.isRead == true
+//   ).length;
+//   totalUnreadCount.textContent = myLibrary.filter(
+//     (book) => book.isRead == false
+//   ).length;
+//   favouriteCount.textContent = myLibrary.filter(
+//     (book) => book.isFavourite == true
+//   ).length;
+// }
 
 function toggleFavouriteIcon(item, icon) {
   item.toggleFavourite();
-  updateBookCounters();
+  // updateBookCounters();
   if (item.isFavourite === true) {
     icon.innerHTML =
       '<svg class="favourite-true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>heart</title><path d="M12,21.35L10.55,20.03C5.4,15.36 2,12.27 2,8.5C2,5.41 4.42,3 7.5,3C9.24,3 10.91,3.81 12,5.08C13.09,3.81 14.76,3 16.5,3C19.58,3 22,5.41 22,8.5C22,12.27 18.6,15.36 13.45,20.03L12,21.35Z" /></svg>';
@@ -274,31 +300,31 @@ function renderLibrary(arr) {
     });
   });
 
-  updateBookCounters();
+  // updateBookCounters();
 }
 
 /* ======================================
    8. FILTER EVENT LISTENERS
 ====================================== */
 
-totalFilter.addEventListener("click", () => {
-  renderLibrary(myLibrary);
-});
+// totalFilter.addEventListener("click", () => {
+//   renderLibrary(myLibrary);
+// });
 
-totalReadFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isRead === true).length === 0) return;
-  filterRead();
-});
+// totalReadFilter.addEventListener("click", () => {
+//   if (myLibrary.filter((book) => book.isRead === true).length === 0) return;
+//   filterRead();
+// });
 
-totalUnreadFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isRead === false).length === 0) return;
-  filterUnread();
-});
+// totalUnreadFilter.addEventListener("click", () => {
+//   if (myLibrary.filter((book) => book.isRead === false).length === 0) return;
+//   filterUnread();
+// });
 
-favouriteFilter.addEventListener("click", () => {
-  if (myLibrary.filter((book) => book.isFavourite).length === 0) return;
-  filterFavourite();
-});
+// favouriteFilter.addEventListener("click", () => {
+//   if (myLibrary.filter((book) => book.isFavourite).length === 0) return;
+//   filterFavourite();
+// });
 
 /* ======================================
    9. INITIAL TEST DATA
@@ -327,22 +353,51 @@ addBookToLibrary("The Creative Act: A Way of Being", "Rick Rubin", 432, true, tr
 
 renderLibrary(myLibrary);
 
+
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  const isValid = [...inputs].every(input => input.validity.valid);
 
-  const title = form.querySelector("#title").value;
+  console.log([...inputs])
+
+  inputs.forEach(input => {
+    const errorMsg = input.closest(".input-group").querySelector('.error');
+    if(!input.validity.valid) {
+      errorMsg.textContent = input.validationMessage;
+    } else {
+            errorMsg.textContent = "";
+
+    }
+  })
+
+console.log(isValid)
+
+if(isValid) {
+  const title = form.querySelector("#title").value.trim();
   const pages = form.querySelector("#pages").value;
-  const author = form.querySelector("#author").value;
+  const author = form.querySelector("#author").value.trim();
   const readStatus = form.querySelector("#readStatus");
   const isRead = readStatus ? readStatus.value === "true" : false;
 
   addBookToLibrary(title, author, pages, isRead);
   showToast("Book added to library.");
-  updateBookCounters();
+  // updateBookCounters();
   renderLibrary(myLibrary);
   form.reset();
+}
+
+
 });
 
+inputs.forEach(input => {
+  input.addEventListener("input", (e) => {
+    if(input.validity.valid) {
+      //submit
+    } else {
+      input.reportValidity();
+    }
+  })
+})
 
 const filterOptions = document.querySelectorAll('.book-stats-wrapper p');
 

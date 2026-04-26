@@ -180,7 +180,7 @@ button {
 .close-button {
     position: absolute;
     top: 0.5rem;
-    left: 0.5rem;
+    right: 0.5rem;
     cursor: pointer;
 }
 
@@ -269,6 +269,7 @@ select {
     align-content: space-between;
     transition: all ease-in 0.1s;
     user-select: none;
+    border-radius: 20px;
 }
 
 .book-card:hover {
@@ -448,4 +449,75 @@ select {
     border-radius: 4px;
 }
 
+.filter-bar {
+    margin-bottom: 1rem;
+}
 
+.filters {
+  display: flex;
+  position: relative;
+  background: white;
+  /* border: 1px solid var(--btn-grey); */
+  border-radius: 99px;
+  width: fit-content;
+  /* margin-inline: auto; */
+}
+
+.filters * {
+  z-index: 2;
+}
+
+.filters input[type="radio"] {
+  display: none;
+}
+
+.filter-tab {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  width: 90px; /* adjust this width as needed */
+  font-size: 0.9rem;
+  color: black;
+  font-weight: 500;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: color 0.15s ease-in;
+}
+
+.filters input[type="radio"]:checked + label {
+  color: #185ee0;
+}
+
+/* The glider element */
+.glider {
+  position: absolute;
+  height: 32px;
+  width: 90px; /* same as .filter-tab width */
+  background-color: #e6eef9;
+  border-radius: 99px;
+  z-index: 1;
+  transition: transform 0.25s ease-out;
+}
+
+/* Move glider depending on which radio is checked */
+input[id="filter-total"]:checked ~ .glider {
+  transform: translateX(0);
+}
+
+input[id="filter-read"]:checked ~ .glider {
+  transform: translateX(100%);
+}
+
+input[id="filter-unread"]:checked ~ .glider {
+  transform: translateX(200%);
+}
+
+input[id="filter-favourites"]:checked ~ .glider {
+  transform: translateX(300%);
+}
+
+.error {
+    font-size: 0.75rem;
+    color: rgb(255, 0, 0);
+}

@@ -27,34 +27,40 @@
 
         <main>
             <h1>My Library</h1>
-            <button class="open-button btn" title="add-book"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <button class="open-button btn" title="add-book"><svg xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24">
                     <title>plus</title>
                     <path d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                 </svg>
             </button>
 
-            <div class="overlay" id="overlay"></div>
             
+
+            <div class="overlay" id="overlay"></div>
+
             <div class="sidebar-form" id="formPanel">
                 <h2>Add Your Book</h2>
                 <div class="divider"></div>
                 <button class="close-button" title="close">&times;</button>
-                <form action="#">
+                <form action="#" novalidate>
                     <div class="input-group">
                         <label for="title">Title</label>
-                        <input type="text" id="title" name="title">
+                        <input type="text" id="title" name="title" required>
+                        <span class="error" aria-live="polite"></span>
                     </div>
                     <div class="input-group">
                         <label for="pages">Number of Pages</label>
-                        <input type="number" min="1" id="pages" name="pages">
+                        <input type="number" min="1" id="pages" name="pages" required>
+                        <span class="error" aria-live="polite"></span>
                     </div>
                     <div class="input-group">
                         <label for="author">Author</label>
-                        <input type="text" id="author" name="author">
+                        <input type="text" id="author" name="author" required>
+                        <span class="error" aria-live="polite"></span>
                     </div>
                     <div class="input-group">
                         <label for="readStatus">Read Status</label>
-                        <select name="readStatus" id="readStatus">
+                        <select name="readStatus" id="readStatus" required>
                             <option value="true">Yes - I have read this book</option>
                             <option value="false">No - I have not read this book</option>
                         </select>
@@ -66,17 +72,24 @@
 
             <section>
                 <h2>Your Book Collection</h2>
-                <div class="book-stats-wrapper">
-                    <p class="total-label active-filter"><span class="bold">Total Books: </span> <span class="total-count">0</span>
-                    </p>
-                    <p class="total-read-label"><span class="bold">Read: </span><span class="total-read-count">0</span>
-                    </p>
-                    <p class="total-unread-label"><span class="bold">Not Read: </span><span
-                            class="total-unread-count">0</span></p>
-                    <p class="total-favourites-label"><span class="bold">Favourited: </span><span
-                            class="total-favourite-count">0</span></p>
+
+                <div class="filter-bar">
+                    <div class="filters">
+                        <input type="radio" id="filter-total" name="filters" checked>
+                        <label class="filter-tab" for="filter-total">All</label>
+
+                        <input type="radio" id="filter-read" name="filters">
+                        <label class="filter-tab" for="filter-read">Read</label>
+
+                        <input type="radio" id="filter-unread" name="filters">
+                        <label class="filter-tab" for="filter-unread">Unread</label>
+
+                        <input type="radio" id="filter-favourites" name="filters">
+                        <label class="filter-tab" for="filter-favourites">Favourites</label>
+
+                        <span class="glider"></span>
+                    </div>
                 </div>
-                <!-- <button class="filter-btn">Filter</button> -->
 
                 <div class="book-grid">
                 </div>
